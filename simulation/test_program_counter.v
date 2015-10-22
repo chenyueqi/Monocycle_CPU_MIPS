@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2015/10/20 19:15:48
+// Create Date: 2015/10/21 20:37:09
 // Design Name: 
-// Module Name: selector31_32
+// Module Name: test_program_counter
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,20 +20,29 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module selector31_32(
-    input [31:0] choice_0 , choice_1 , choice_2 ,
-	input [1:0] selec,
-	output reg [31:0] out
+module test_program_counter();
+	reg clk;
+	reg [31:0] pc_in;
+	wire [31:0] pc_out;
 
-    );
-    always@(*)
-	begin
-		case(selec)
-			2'b00: out = choice_0;
-			2'b01: out = choice_1;
-			2'b10: out = choice_2;
-			default: out = choice_0;
-		endcase
+	program_counter pc(
+		.PC_in(pc_in),
+		.PC_out(pc_out),
+		.clk(clk)
+	);
+
+	initial begin
+		clk = 1'b1;
+		pc_in = 32'h1;
+		#1
+		clk = 1'b0;
+		#1
+		clk = 1'b1;
+		pc_in = 32'h2;
+		#1
+		clk = 1'b0;
+		#1
+		$stop;
+
 	end
-	
 endmodule

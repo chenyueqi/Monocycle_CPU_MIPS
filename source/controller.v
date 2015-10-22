@@ -39,6 +39,10 @@ module controller
 
 	always@(*)//to avoid latch , assign completely
 	begin
+		Shift_amount_sel <= 1'b0;
+		Shift_op <= 2'b00;
+		ALU_op <= 4'b1110; 
+		condition <= 3'b000;
 		if(Overflow_out == 0)begin//Rd_byte_w_en in overflow_out = 0
 			if((op < 5'h8) && (op > 5'h0))
 				Rd_byte_w_en <= 4'b1111;

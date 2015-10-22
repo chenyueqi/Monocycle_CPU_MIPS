@@ -23,23 +23,22 @@
 module extend_selector(
     	input [15:0] Instr,
 	    input Extend_sel,
-    	output [31:0] Ex_offset
+    	output reg [31:0] Ex_offset
 );
-	always@(*)
-	begin
-		if(Extend_sel == 1'b0)
-		begin
-			Ex_offset[31:16] = 16'b0;
-			Ex_offset[15:0] = Instr[15:0];
-		end
-		else
-		begin
-			if(Instr[15] == 0)
-				Ex_offset[31:16] = 16'b0;
-			else
-				Ex_offset[31:16] = 16'hffff;
-			Ex_offset[15:0] = Instr[15:0];	
-
-		end
-    	end
+	   always@(*)
+	   begin
+            if(Extend_sel == 1'b0)
+            begin
+                 Ex_offset[31:16] = 16'b0;
+                 Ex_offset[15:0] = Instr[15:0];
+            end
+            else
+            begin
+                if(Instr[15] == 0)
+                     Ex_offset[31:16] = 16'b0;
+                else
+                     Ex_offset[31:16] = 16'hffff;
+                     Ex_offset[15:0] = Instr[15:0];	
+            end
+        end
 endmodule

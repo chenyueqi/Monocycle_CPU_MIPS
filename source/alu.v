@@ -59,6 +59,9 @@ module alu
 
 	always@(*)
 	begin
+	   less = 1'b0;
+	   overflow_out = 1'b0;
+	   alu_out = 32'h0;
 		if(alu_ctr == 3'b111)
 		begin
 			alu_out = O_out;

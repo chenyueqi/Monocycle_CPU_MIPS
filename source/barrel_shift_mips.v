@@ -33,6 +33,8 @@ module barrel_shift_mips
 	reg [(DATA_WIDTH -1):0] inter2;
     	always@(*)
     	begin
+    	   inter1 = 32'h0;
+    	   inter2 = 32'h0;
     		data_out = data_in;
 		case(op)
 	 	lo_l: data_out = data_in << shift_count;
