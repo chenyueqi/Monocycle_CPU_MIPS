@@ -22,11 +22,19 @@
 
 
 module mono_cpu(
-	input clk
+	input clk,
+	output [31:0] pc,
+	output [31:0] Rd_in
+//	output [31:0] instr,
+//	output branch_selec,
+//	wire [31:0] Ex_offset,
+//	wire [31:0] jump_selec_choice0,
+//	wire [31:0] Ex_offset_2
 );
-	wire [31:0] pc;
+  //  (*mark_debug = "true"*) wire [31:0] pc;
 	wire [31:0] pc_next;
 	wire [31:0] instr;
+//	wire [31:0] pc;
 
 	/*controller related*/
 	wire Jump , Extend_sel , Shift_amount_sel , Rd_addr_sel;
@@ -43,7 +51,7 @@ module mono_cpu(
 	/* register group related*/
 	wire [4:0] Rt_addr;
 	wire [4:0] Rd_addr;
-	wire [31:0] Rd_in;
+//	wire [31:0] Rd_in;
 	wire [31:0] Rs_out;
 	wire [31:0] Rt_out;
 
@@ -53,6 +61,7 @@ module mono_cpu(
 
 	
 	wire [31:0] Ex_offset;
+	wire [31:0] Ex_offset_2;
 	wire [31:0] Imm_ex;
 	wire branch_selec;
 	wire [31:0] jump_selec_choice0;
@@ -117,6 +126,12 @@ module mono_cpu(
 		.clk(clk)
 	);
 
+	/*instruction memory*/
+	instr_memory IM(
+		.addr(pc),
+		.instr(instr)
+	);
+
 	selector21_5 rt_addr_selector(
 		.choice_0(instr[20:16]),
 		.choice_1(5'b0),
@@ -174,7 +189,7 @@ module mono_cpu(
 
 	selector21_32 branch_selector(
 		.choice_0(pc + 4),
-		.choice_1(pc + 4 + Ex_offset << 2),
+		.choice_1(pc + 4 + Ex_offset_2),
 		.selec(branch_selec),
 		.out(jump_selec_choice0)
 	);
@@ -188,9 +203,12 @@ module mono_cpu(
 
 
 
+
 	assign Imm_ex[31:16] = instr[15:0];
 	assign Imm_ex[15:0] = 16'h0;
 	assign jump_selec_choice1[31:28] = pc[31:28];
 	assign jump_selec_choice1[27:2] = instr[25:0];
 	assign jump_selec_choice1[1:0] = 2'b0;
+	assign Ex_offset_2[31:2] = Ex_offset[29:0];
+	assign Ex_offset_2[1:0] = 2'b00;
 endmodule
