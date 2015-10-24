@@ -22,14 +22,14 @@
 
 module program_counter(
 	input [31:0] PC_in,
-	output [31:0] PC_out,
+	output reg [31:0] PC_out,
 	input clk
 );
-    reg [31:0] pc;
-    
+   
     initial
-        pc = 32'h0;
+        PC_out = 32'h0;
     always@(negedge clk)
-	    pc = PC_in;
-	assign PC_out = pc;
+    begin
+	    PC_out = PC_in;
+	end
 endmodule

@@ -38,7 +38,7 @@ module extend_selector(
                      Ex_offset[31:16] = 16'b0;
                 else
                      Ex_offset[31:16] = 16'hffff;
-                     Ex_offset[15:0] = Instr[15:0];	
+                Ex_offset[15:0] = Instr[15:0];	
             end
         end
 endmodule

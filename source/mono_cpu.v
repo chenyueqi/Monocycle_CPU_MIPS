@@ -23,15 +23,8 @@
 
 module mono_cpu(
 	input clk,
-	output [31:0] pc,
-	output [31:0] Rd_in
-//	output [31:0] instr,
-//	output branch_selec,
-//	wire [31:0] Ex_offset,
-//	wire [31:0] jump_selec_choice0,
-//	wire [31:0] Ex_offset_2
+	output [31:0] pc
 );
-  //  (*mark_debug = "true"*) wire [31:0] pc;
 	wire [31:0] pc_next;
 	wire [31:0] instr;
 //	wire [31:0] pc;
@@ -51,7 +44,7 @@ module mono_cpu(
 	/* register group related*/
 	wire [4:0] Rt_addr;
 	wire [4:0] Rd_addr;
-//	wire [31:0] Rd_in;
+	wire [31:0] Rd_in;
 	wire [31:0] Rs_out;
 	wire [31:0] Rt_out;
 
@@ -169,7 +162,7 @@ module mono_cpu(
 	selector31_32 B_in_selector(
 		.choice_0(Rt_out),
 		.choice_1(Ex_offset),
-		.choice_2(),
+		.choice_2(Imm_ex),
 		.selec(B_in_sel),
 		.out(B_in)
 	);
