@@ -28,7 +28,7 @@ module barrel_shift_mips
 	input [1:0] op,
 	output reg [(DATA_WIDTH -1):0] data_out
 );
-	integer i;
+	//integer i;
 	reg [(DATA_WIDTH -1):0] inter1;
 	reg [(DATA_WIDTH -1):0] inter2;
     	always@(*)
@@ -41,9 +41,12 @@ module barrel_shift_mips
 		lo_r: data_out = data_in >> shift_count;
 		al_r: data_out = $signed(data_in) >>> shift_count;
 		ci_r: begin 
-			inter1 <= data_in >> shift_count; 
-			inter2 <= data_in << (DATA_WIDTH -2 - shift_count);
-			data_out = inter1 + inter2;
+			if(shift_count[4] == 1'b1) data_out = {data_out[15:0] , data_out[31:16]};
+			if(shift_count[3] == 1'b1) data_out = {data_out[7:0] , data_out[31:8]};
+			if(shift_count[2] == 1'b1) data_out = {data_out[3:0] , data_out[31:4]};
+			if(shift_count[1] == 1'b1) data_out = {data_out[1:0] , data_out[31:2]};
+			if(shift_count[0] == 1'b1) data_out = {data_out[0] , data_out[31:1]};
+			
 			end
 		endcase
 	end

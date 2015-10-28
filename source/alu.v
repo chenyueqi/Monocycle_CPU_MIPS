@@ -119,7 +119,7 @@ module alu
 			if(less == 0)
 				alu_out = 0;
 			else
-				alu_out = 32'hffffffff;
+				alu_out = 32'h1;
 		end
 		else if(alu_ctr == 3'b110)
 		begin
