@@ -1,0 +1,90 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{ctex}
+\usepackage{CJK}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{picinpar}
+\usepackage{textcomp}
+\usepackage{faktor}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{float
+}
+\addtolength{\topmargin}{-54pt}
+\setlength{\oddsidemargin}{0cm} % 3.17cm - 1 inch
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\textwidth}{17cm}
+\setlength{\textheight}{25cm} % 24.62
+
+
+\renewcommand\refname{参考文献}
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+
+\begin{document}
+
+\title{单时钟cpu设计} \date{}\maketitle
+\noindent\author{陈越琦\quad 121160005 \\2015/10/30}
+
+\section{实验目的}
+\begin{enumerate}
+\item 理解 MIPS 常用的指令系统并掌握单时钟周期 CPU 的工作原理与逻辑功能实现。
+\item 通过对单时钟周期 CPU 的运行状况进行观察和分析，进一步加深理解。
+\end{enumerate}
+
+\section{实验设备}
+\begin{enumerate}
+\item 软件环境：Xilinx\_Vivado\_SDK\_2014.2\_0606\_1\_Win64 windows 7 操作系统 
+\item 硬件环境：NEXYS4 开发板 FPGA 芯片：xc7a100tcsg324-1
+\end{enumerate}
+
+\section{实验原理图}
+\begin{figure}[H]
+\includegraphics[width = 180mm]{report.png}
+\caption{cpu电路原理图}%
+\end{figure}
+
+\begin{figure}[H]
+\subfigure{\includegraphics[width = 150mm ]{controller_1.png}}
+\subfigure{\includegraphics[width = 150mm ]{controller_2.png}}
+\subfigure{\includegraphics[width = 150mm ]{controller_3.png}}
+\caption{单周期cpu指令控制信号表}%
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 120mm]{instruction.png}
+\caption{各个指令各字段值}%
+\end{figure}
+
+\begin{large}
+\textbf{注}
+\end{large}
+：针对各个信号的译码图见附件 《单周期cpu指令控制信号表.xls》。原理图中alu , 寄存器组 , 桶形移位器 模块图在前几次实验报告中有详细图示。
+
+\section{实验过程}
+实验分成四个步完成，第一步实现单周期cpu指令控制信号表，第二步根据各个指令字段值译码产生信号，第三步将alu,寄存器组,桶形移位器和其他部件与控制器拼接起来实现电路图，第四步生成测试程序，仿真测试。
+\subsection{设计思路}
+实验核心是设计单周期cpu指令控制信号表，在此基础上设计出控制器，根据指令字段生成控制信号。cpu中alu,寄存器组,桶形移位器等部件沿用前三次实验。根据电路原理图拼接各个组件。\\
+\indent 指令存储器大小为$ 256 \times 32$ ， 输入为32位pc值，取高30位作为索引。在开机之初，通过函数readmenh读取文件ram.txt十六进制形式的测试程序读入指令存储器。ram.txt中每行对应一个十六进制指令。存储起始地址为指令存储器0地址，cpu在执行过程中，通过pc的值从指令存储器中获得相应指令，指令经过控制器译码之后产生控制信号控制其他部件工作。在获得下一个pc值之后，更新程序计数器内容，为一下时钟周期的工作做准备。\\
+\indent 工程顶层模块为mono\_cpu.v，子模块为各个部件。
+\subsection{实验仿真}
+实验测试程序通过gcc-mips工具链编译而成，原汇编程序start.S，生成目标文件code.txt和\\ram.txt见附件。当cpu中pc值为0x108时，表明程序运行正常，否则，如果出现pc值停留在其他地址值的情况或者pc指向测试程序地址空间之外的情况或者pc值最后为0x110都是错误的。
+\indent 因为本次实验中产生信号过多，并且测试波形很长，所以不在此粘贴仿真波形图，通过vivado打开工程后可以直接在工程文件中仿真。
+\section{实验中遇到的问题和解决方案}
+\begin{enumerate}
+\item 在第二次实验设计的桶形移位器中，循环移位使用阻塞赋值方式实现，导致本次实验中，cpu跑到相应的循环移位指令时，不能在一个时钟周期中产生结果，导致cpu不能继续执行
+\item 在第三次实验设计的alu中，对于slt指令理解有偏差。该指令的执行结果应该是最低位为0或者1，其他位为0，而不是全0或者全1。这个指令的执行错误影响了剩余指令的执行。
+\end{enumerate}
+\section{实验总结}
+
+\section{思考题}
+\begin{large}
+\begin{enumerate}
+\item 单时钟周期cpu有什么特点?在设计单时钟周期cpu应注意什么？
+\end{enumerate}
+\end{large}
+\noindent 在单时钟周期cpu中，每个指令的CPI都是1。这意味着，所有指令都在一个周期内完成。因此在设计单时钟周期cpu时应该注意主频的选择。如果主频过大，导致一个指令，尤其是涉及到访存的指令不能在一个周期内完成，将会导致错误；如果主频过小，则会导致过多空闲时间，影响cpu执行效率。
+\end{document}
