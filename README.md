@@ -1,5 +1,6 @@
 # Monocycle_CPU_MIPS
 A simple monocycle cpu based on mips instruction set, which served as a part of course 'computer organization and design'.
+Monocycle cpu is indicated as all instructions will be completed in one clock cycle, which means the CPI(cycle per instruction) of monocycle cpu is 1. So, the cycle of monocycle cpu is so long that we seldom use monocycle cpu in practice. However, to know exactly the datapath of mono cpu is the key of understanding and realizing multicycle cpu and pipeline cpu in my view.
 
 Develop environment:
 Xilinx_Vivado_SDK_2014.2_0606_1_Win64
@@ -17,12 +18,8 @@ File struct:
     |program_counter.v -- pc
     |register_mips32.v -- 32 registers in mips cpu , register0 is always zero
     |selector21_5.v -- 2 to 1 selector with data path wedth 5 bits
-    |selector21_32.v -- 2 to 1 selector with data path wedth 31 bits
-    |selector31_31.v -- 3/4 to 1 selector with data path wedth 31 bits
-    |selector81_1.v -- 8 to 1 selector with data path wedth 1 bit
-  directory ./simulation
-    |test_control.v -- simulate controller 
-    |test_alu.v -- simulate alu
+    |selector21_32.v -- 2 to 1 selector with data path width 32 bits
+  directory ./simulate
     |test_alu_controller.v --simulate alu controller
     |test_barrel_shift_mips.v --simulate barrel shifter
     |test_controller.v --simulate controller
